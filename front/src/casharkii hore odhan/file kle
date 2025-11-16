@@ -1,0 +1,300 @@
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import Login from "./component/Login";
+// import Landpage from "./component/Landpage";
+// import Register from "./component/Register";
+
+// function App() {
+//   return (
+//     <BrowserRouter>
+//       <Routes>
+//         <Route path="/" element={<Landpage />} />
+//         <Route path="/login" element={<Login />} />
+//         <Route path="/Register" element={<Register />} />
+//       </Routes>
+//     </BrowserRouter>
+//   );
+// }
+
+// export default App; apps js
+
+// landpage
+import React from "react";
+import { Link } from "react-router-dom";
+function Landpage() {
+  return (
+    <div className="bg-black text-red-600 min-h-screen flex flex-col justify-center items-center text-center font-mono">
+      <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-widest font-holloween">
+        DISCOVER DARK SECRET
+      </h1>
+      <div>
+        {" "}
+        <img src="IMG_6559.PNG" className="h-40 w-40 text-red-700" alt="" />
+      </div>
+      <p class="max-w-2xl text-red-500 leading-relaxed px-4 font-holloween">
+        Darkness falls across the land and the midnight hour is close at hand.
+        Wards of creatures and ghouls deep inside of us are closing in. No mere
+        mortal can resist the evil of the human.
+      </p>
+      <p class="text-2xl font-bold mt-4 text-red-600 font-holloween">
+        CAN YOU?
+      </p>
+      <div class=" flex display-flex justify-between a mt-8 gap-1.5 ">
+        <button className="bg-red-700 hover:bg-red-800 text-white px-6 py-2 rounded-md transition font-holloween">
+          <Link to="/login">Login</Link>
+        </button>
+        <button className="bg-red-700 hover:bg-red-800 text-white px-6 py-2 rounded-md transition font-holloween">
+          <Link to="/register">Register</Link>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default Landpage;
+// logim
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { login } from "../lib/api/user";
+function Login() {
+  const [error, setError] = useState("");
+  const [formdata, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  function handleChange(e) {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      // halkan waxaad ku yeeri doontaa API login function
+      login(formdata);
+      console.log(formdata);
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
+    }
+  }
+
+  return (
+    <div className="h-screen flex flex-col justify-center items-center bg-slate-800 text-white">
+      <h1 className="text-8xl font-holloween text-center text-red-500 mb-6">
+        Login
+      </h1>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <input
+          name="email"
+          type="email"
+          required
+          placeholder="Email"
+          className="p-4 rounded-4xl bg-slate-50 text-slate-900 w-max"
+          onChange={handleChange}
+        />
+
+        <input
+          name="password"
+          type="password"
+          required
+          placeholder="Password"
+          className="p-4 rounded-4xl bg-slate-50 text-slate-900 w-max"
+          onChange={handleChange}
+        />
+
+        <div className="flex justify-center text-center">
+          <button
+            className="bg-red-500 w-32 rounded-full p-2 text-lg"
+            type="submit"
+          >
+            Login
+          </button>
+        </div>
+      </form>
+
+      <p className="text-center text-slate-300 mt-4">
+        Don't have an account?{" "}
+        <Link to="/register" className="text-red-500 underline">
+          Register
+        </Link>
+      </p>
+
+      {error && <p className="text-red-500 text-center">{error}</p>}
+    </div>
+  );
+}
+
+export default Login;
+// reg
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { register } from "../lib/api/user";
+
+function Register() {
+  const [error, setError] = useState(null);
+  const [formdata, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  function handleChange(e) {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      await register(formdata); // ✅ AWAIT!
+      navigate("/login"); // ✅ Redirect after success
+    } catch (error) {
+      setError(error.message);
+    }
+  }
+
+  return (
+    <div className="h-screen flex flex-col justify-center items-center bg-slate-800 text-white">
+      <h1 className="text-8xl font-holloween text-center text-red-500 mb-6">
+        Register
+      </h1>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <input
+          name="name"
+          type="text"
+          required
+          placeholder="name"
+          onChange={handleChange}
+        />
+        <input
+          name="email"
+          type="email"
+          required
+          placeholder="email"
+          onChange={handleChange}
+        />
+        <input
+          name="password"
+          type="password"
+          required
+          placeholder="Password"
+          onChange={handleChange}
+        />
+        <button
+          className="bg-red-500 w-32 rounded-full p-2 text-lg"
+          type="submit"
+        >
+          Register
+        </button>
+      </form>
+
+      <p className="text-center text-slate-300 mt-4">
+        I have an account?{" "}
+        <Link to="/login" className="text-red-500 underline">
+          Login
+        </Link>
+      </p>
+
+      {error && <p className="text-red-500 text-center">{error}</p>}
+    </div>
+  );
+}
+
+export default Register;
+// index js
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+const app = express();
+app.use(express.json());
+app.use(cors());
+async function connectDb() {
+  try {
+    await mongoose.connect(
+      "mongodb+srv://ftayasin:fta12345@cluster0.peekonz.mongodb.net/secret?appName=Cluster0"
+    );
+    console.log("mongodb connect");
+  } catch (error) {
+    console.log("error conect mongodb");
+  }
+}
+connectDb();
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+});
+const User = mongoose.model("User", userSchema);
+
+// ✅ Signup Route
+app.post("/user/registration", async (req, res) => {
+  console.log(req.body);
+  const { name, email, password } = req.body;
+
+  try {
+    const user = new User({ name, email, password });
+    await user.save();
+    res.send({
+      massage: "User registered successfully",
+    });
+  } catch (err) {
+    res.status(500).send("Failed to register user");
+  }
+});
+
+app.post("/user/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email, password }); // Waxaa noqotay user, lama beddelayo model
+
+  if (!user) {
+    return res.status(400).send({ message: "Email or password incorrect" });
+  }
+
+  res.send({ message: "User logged in successfully" });
+  console.log("user logged in");
+});
+
+// ✅ Start server
+const PORT = 3000;
+app.listen(3000, () => console.log(`Server running on port ${PORT}`));
+// server js
+export async function register(userData) {
+  try {
+    const response = await fetch("http://localhost:3000/user/registration", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+    const data = await response.json();
+
+    console.log("Success:", data);
+    return data;
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+}
+
+export async function login(userData) {
+  try {
+    const response = await fetch("http://Localhost:3000/user/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+    console.log("Success:", data);
+  } catch (error) {
+    console.error(error);
+  }
+}

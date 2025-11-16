@@ -1,0 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Creepster&display=swap");
+@import "tailwindcss"; /* Tailwind CSS import should come after font imports */
+/* src/index.css or src/styles/fonts.css */
+
+@theme {
+  --font-holloween: "Creepster";
+  /* You can define more specific properties if needed, e.g., font-feature-settings */
+}
