@@ -78,7 +78,7 @@ function App() {
           <div className="bg-yellow-400 w-8 h-8 rounded flex items-center justify-center text-white font-bold text-lg">
             K
           </div>
-          <h1 className="text-xl font-medium">Keep</h1>
+          <h1 className="text-xl font-medium">Keepify</h1>
         </div>
 
         {/* Middle - Search bar */}
