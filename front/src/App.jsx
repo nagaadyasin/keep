@@ -20,7 +20,7 @@ function App() {
   useEffect(() => {
     async function fetchNote() {
       try {
-        const res = await fetch("http://localhost:1000/notes");
+        const res = await fetch("http://localhost:9000/notes");
         const data = await res.json();
         setNotes(data);
       } catch (error) {
@@ -34,7 +34,7 @@ function App() {
   async function handleAddNote() {
     if (!title.trim() && !content.trim()) return;
 
-    const response = await fetch("http://localhost:1000/notes", {
+    const response = await fetch("http://localhost:9000/notes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, content }),
@@ -47,7 +47,7 @@ function App() {
   }
   async function handleDeletNote(id) {
     try {
-      const response = await fetch(`http://localhost:1000/notes/${id}`, {
+      const response = await fetch(`http://localhost:9000/notes/${id}`, {
         method: "DELETE",
       });
       const data = await response.json();
